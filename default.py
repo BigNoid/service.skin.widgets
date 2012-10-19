@@ -245,15 +245,12 @@ class Main:
             count = 0
             for item in json_response['result']['episodes']:
                 count += 1
-                '''
                 # This part is commented out because it takes 1.5second extra on my system to request these which doubles the total time.
                 # Hence the ugly path hack that will require users to have season folders.
-                json_query2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["file", "studio"], "tvshowid":%s}, "id": 1}' %item['tvshowid'])
+                json_query2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["thumbnail"], "tvshowid":%s}, "id": 1}' %item['tvshowid'])
                 json_query2 = unicode(json_query2, 'utf-8', errors='ignore')
                 json_response2 = simplejson.loads(json_query2)
-                path = json_response2['result']['tvshowdetails']['file']
-                studio = json_response2['result']['tvshowdetails']['studio'][0]
-                '''
+                tvshowthumb = json_response2['result']['tvshowdetails']['thumbnail']
                 if season_folders == 'true':
                     path = os.path.split(media_path(item['file']))[0]
                 else:
@@ -285,7 +282,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Clearart"    % (request, count), xbmc.validatePath(os.path.join(path, 'clearart.png')))
                 # Requires extra JSON-RPC request, see commented out part
                 #self.WINDOW.setProperty("%s.%d.Studio"      % (request, count), studio)
-                self.WINDOW.setProperty("%s.%d.TVShowThumb" % (request, count), item['thumbnail'])
+                self.WINDOW.setProperty("%s.%d.TVShowThumb" % (request, count), tvshowthumb)
                 self.WINDOW.setProperty("%s.%d.SeasonThumb" % (request, count), seasonthumb)
                 self.WINDOW.setProperty("%s.%d.Resume"      % (request, count), resume)
                 self.WINDOW.setProperty("%s.%d.Played"      % (request, count), played)
